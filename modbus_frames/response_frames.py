@@ -18,7 +18,7 @@ class ResponseFrames:
         frame.append(function_code)
         byte_count = quantity // 8 + (1 if quantity % 8 else 0)
         print(type(byte_count))
-        frame += byte_count.to_bytes(2, byteorder='big')
+        frame += byte_count.to_bytes(1, byteorder='big')
         for byte_no in range(byte_count):
             byte = 0
             for bit in range(0,8):
@@ -33,7 +33,7 @@ class ResponseFrames:
         function_code = fc.read_discrete_inputs
         frame.append(function_code)
         byte_count = quantity // 8 + (1 if quantity % 8 else 0)
-        frame += byte_count.to_bytes(2, byteorder='big')
+        frame += byte_count.to_bytes(1, byteorder='big')
         for byte_no in range(byte_count):
             byte = 0
             for bit in range(0,8):
@@ -48,7 +48,7 @@ class ResponseFrames:
         function_code = fc.read_holding_registers
         frame.append(function_code)
         byte_count = quantity * 2
-        frame += byte_count.to_bytes(2, byteorder='big')
+        frame += byte_count.to_bytes(1, byteorder='big')
         for i in range(quantity):
             frame += self._holding_registers[start_address + i].to_bytes(2, byteorder='big')
         return frame
@@ -58,7 +58,7 @@ class ResponseFrames:
         function_code = fc.read_input_registers
         frame.append(function_code)
         byte_count = quantity * 2
-        frame += byte_count.to_bytes(2, byteorder='big')
+        frame += byte_count.to_bytes(1, byteorder='big')
         for i in range(quantity):
             frame += self._input_registers[start_address + i].to_bytes(2, byteorder='big')
         return frame
