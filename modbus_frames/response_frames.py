@@ -68,10 +68,7 @@ class ResponseFrames:
         function_code = fc.write_single_coil
         frame.append(function_code)
         frame += address.to_bytes(2, byteorder='big')
-        if value == 0xFF00:
-            self._coils[address] = True
-        else:
-            self._coils[address] = False
+        self._coils[address] = bool(value)
         frame += (0xFF00 if self._coils[address] else 0x0000).to_bytes(2, byteorder='big')
         return frame
 
@@ -90,8 +87,6 @@ class ResponseFrames:
         frame.append(function_code)
         frame += start_address.to_bytes(2, byteorder='big')
         frame += quantity.to_bytes(2, byteorder='big')
-        byte_count = quantity // 8 + (1 if quantity % 8 else 0)
-        frame += byte_count.to_bytes(1, byteorder='big')
         return frame
 
     def write_multiple_registers(self,start_address,quantity,values):
@@ -100,6 +95,4 @@ class ResponseFrames:
         frame.append(function_code)
         frame += start_address.to_bytes(2, byteorder='big')
         frame += quantity.to_bytes(2, byteorder='big')
-        byte_count = quantity * 2
-        frame += byte_count.to_bytes(1, byteorder='big')
         return frame
