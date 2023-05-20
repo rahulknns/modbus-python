@@ -12,7 +12,7 @@ class ResponseFrames:
         self._holding_registers = holding_registers
         self._input_registers = input_registers
     
-    def read_coils(start_address,quantity):
+    def read_coils(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_coils
         frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -26,7 +26,7 @@ class ResponseFrames:
             frame.append(byte.to_bytes(1, byteorder='big'))
         return frame
     
-    def read_discrete_inputs(start_address,quantity):
+    def read_discrete_inputs(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_discrete_inputs
         frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -40,7 +40,7 @@ class ResponseFrames:
             frame.append(byte.to_bytes(1, byteorder='big'))
         return frame
     
-    def read_holding_registers(start_address,quantity):
+    def read_holding_registers(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_holding_registers
         frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -50,7 +50,7 @@ class ResponseFrames:
             frame += holding_registers[start_address + i].to_bytes(2, byteorder='big')
         return frame
     
-    def read_input_registers(start_address,quantity):
+    def read_input_registers(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_input_registers
         frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -60,7 +60,7 @@ class ResponseFrames:
             frame += input_registers[start_address + i].to_bytes(2, byteorder='big')
         return frame
 
-    def write_single_coil(address,value):
+    def write_single_coil(self,address,value):
         frame = bytearray()
         function_code = fc.write_single_coil
         frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -74,7 +74,7 @@ class ResponseFrames:
 
 
 
-def write_single_register(address,value):
+def write_single_register(self,address,value):
     frame = bytearray()
     function_code = fc.write_single_register
     frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -83,7 +83,7 @@ def write_single_register(address,value):
     frame += self._holding_registers[address].to_bytes(2, byteorder='big')
     return frame
 
-def write_multiple_coils(start_address,quantity,values):
+def write_multiple_coils(self,start_address,quantity,values):
     frame = bytearray()
     function_code = fc.write_multiple_coils
     frame.append(function_code.to_bytes(1, byteorder='big'))
@@ -93,7 +93,7 @@ def write_multiple_coils(start_address,quantity,values):
     frame.append(byte_count.to_bytes(1, byteorder='big'))
     return frame
 
-def write_multiple_registers(start_address,quantity,values):
+def write_multiple_registers(self,start_address,quantity,values):
     frame = bytearray()
     function_code = fc.write_multiple_registers
     frame.append(function_code.to_bytes(1, byteorder='big'))
