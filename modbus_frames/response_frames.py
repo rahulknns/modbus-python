@@ -15,7 +15,7 @@ class ResponseFrames:
     def read_coils(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_coils
-        frame.append(function_code.to_bytes(1, byteorder='big'))
+        frame.append(function_code)
         byte_count = quantity // 8 + (1 if quantity % 8 else 0)
         frame.append(byte_count.to_bytes(2, byteorder='big'))
         for i in range(byte_count):
@@ -29,7 +29,7 @@ class ResponseFrames:
     def read_discrete_inputs(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_discrete_inputs
-        frame.append(function_code.to_bytes(1, byteorder='big'))
+        frame.append(function_code)
         byte_count = quantity // 8 + (1 if quantity % 8 else 0)
         frame.append(byte_count.to_bytes(2, byteorder='big'))
         for i in range(byte_count):
@@ -43,7 +43,7 @@ class ResponseFrames:
     def read_holding_registers(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_holding_registers
-        frame.append(function_code.to_bytes(1, byteorder='big'))
+        frame.append(function_code)
         byte_count = quantity * 2
         frame.append(byte_count.to_bytes(2, byteorder='big'))
         for i in range(quantity):
@@ -53,7 +53,7 @@ class ResponseFrames:
     def read_input_registers(self,start_address,quantity):
         frame = bytearray()
         function_code = fc.read_input_registers
-        frame.append(function_code.to_bytes(1, byteorder='big'))
+        frame.append(function_code)
         byte_count = quantity * 2
         frame.append(byte_count.to_bytes(2, byteorder='big'))
         for i in range(quantity):
@@ -63,7 +63,7 @@ class ResponseFrames:
     def write_single_coil(self,address,value):
         frame = bytearray()
         function_code = fc.write_single_coil
-        frame.append(function_code.to_bytes(1, byteorder='big'))
+        frame.append(function_code)
         frame += address.to_bytes(2, byteorder='big')
         if value == 0xFF00:
             self._coils[address] = True
@@ -77,7 +77,7 @@ class ResponseFrames:
 def write_single_register(self,address,value):
     frame = bytearray()
     function_code = fc.write_single_register
-    frame.append(function_code.to_bytes(1, byteorder='big'))
+    frame.append(function_code)
     frame += address.to_bytes(2, byteorder='big')
     self._holding_registers[address] = value
     frame += self._holding_registers[address].to_bytes(2, byteorder='big')
@@ -86,7 +86,7 @@ def write_single_register(self,address,value):
 def write_multiple_coils(self,start_address,quantity,values):
     frame = bytearray()
     function_code = fc.write_multiple_coils
-    frame.append(function_code.to_bytes(1, byteorder='big'))
+    frame.append(function_code)
     frame += start_address.to_bytes(2, byteorder='big')
     frame += quantity.to_bytes(2, byteorder='big')
     byte_count = quantity // 8 + (1 if quantity % 8 else 0)
@@ -96,7 +96,7 @@ def write_multiple_coils(self,start_address,quantity,values):
 def write_multiple_registers(self,start_address,quantity,values):
     frame = bytearray()
     function_code = fc.write_multiple_registers
-    frame.append(function_code.to_bytes(1, byteorder='big'))
+    frame.append(function_code)
     frame += start_address.to_bytes(2, byteorder='big')
     frame += quantity.to_bytes(2, byteorder='big')
     byte_count = quantity * 2
