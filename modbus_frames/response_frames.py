@@ -19,11 +19,12 @@ class ResponseFrames:
         byte_count = quantity // 8 + (1 if quantity % 8 else 0)
         print(type(byte_count))
         frame += byte_count.to_bytes(2, byteorder='big')
-        for i in range(byte_count):
+        for byte_no in range(byte_count):
             byte = 0
-            for j in range(8):
-                if self._coils[start_address + i * 8 + j]:
-                    byte |= 1 << j
+            for bit in range(0,8):
+                if (  byte_no*8 + bit + 1) > quantity:
+                    break
+                byte |= self._coils[start_address + byte_no*8 + bit] << bit
             frame += byte.to_bytes(1, byteorder='big')
         return frame
     
