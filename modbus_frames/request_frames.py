@@ -1,4 +1,4 @@
-import functions_codes as fc
+from modbus_frames import functions_codes as fc
 def read_coils(start_address,quantity):
     """
     Function to build a read coils request frame
@@ -66,6 +66,7 @@ def write_single_coil(address,value):
     # Address
     frame += address.to_bytes(2, byteorder='big')
     # Value
+    value = bool(value)
     frame += value.to_bytes(2, byteorder='big')
     return frame
 
@@ -100,11 +101,11 @@ def write_multiple_coils(start_address,quantity,values):
     frame += byte_count.to_bytes(1, byteorder='big')
     # Values
     values = [bool(value) for value in values]
-    for i in range(byte_count):
+    for byte_no in range(byte_count):
         byte = 0
-        for j in range(7,-1,-1):
+        for bit in range(0,8):
             try:
-                byte += values[i*8+j] << j
+                byte += values[byte_no*8+bit] << bit
             except IndexError:
                 break
         frame += byte.to_bytes(1, byteorder='big')
@@ -127,5 +128,5 @@ def write_multiple_registers(start_address,quantity,values):
     frame += byte_count.to_bytes(1, byteorder='big')
     # Values
     for value in values:
-        frame += values.to_bytes(2, byteorder='big')
+        frame += value.to_bytes(2, byteorder='big')
     return frame

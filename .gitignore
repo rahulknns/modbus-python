@@ -1,0 +1,4 @@
+build/**
+modbus_frames/__pycache__/**
+modbus_python.egg-info/**
+_

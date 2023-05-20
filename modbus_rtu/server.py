@@ -84,3 +84,4 @@ class ModbusRtuServer():
     def run(self):
         while True:
             self.check_for_requests()
+            

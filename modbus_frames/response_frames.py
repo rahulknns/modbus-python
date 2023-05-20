@@ -1,4 +1,4 @@
-import functions_codes as fc
+from modbus_frames import functions_codes as fc
 
 class ResponseFrames:
     _coils = []
