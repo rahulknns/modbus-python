@@ -22,15 +22,19 @@ class ModbusRtuClient():
         response = self._serial.read( 5 + byte_count)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
-            return response
+            self._serial.close()
+            return None
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return None
         if (response[1] != fc.read_coils):
             print("function code doesn't match")
+            self._serial.close()
             return None
         if (response[2] != byte_count):
             print(" Wrong Byte count")
+            self._serial.close()
             return None
         values = []
         data = response[3:-2]
@@ -38,6 +42,7 @@ class ModbusRtuClient():
             for bit in range(0,8):
                 if (quantity >= byte_no*8 + bit + 1):
                     values.append( (byt_e & 2**bit) >> bit )
+        self._serial.close()
         return values
     
     def read_discrete_inputs(self,start_address,quantity):
@@ -51,15 +56,19 @@ class ModbusRtuClient():
         response = self._serial.read( 5 + byte_count)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return response
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return None
         if (response[1] != fc.read_discrete_inputs):
             print("function code doesn't match")
+            self._serial.close()
             return None
         if (response[2] != byte_count):
             print(" Wrong Byte count")
+            self._serial.close()
             return None
         values = []
         data = response[3:-2]
@@ -67,6 +76,7 @@ class ModbusRtuClient():
             for bit in range(0,8):
                 if (quantity >= byte_no*8 + bit + 1):
                     values.append( (byt_e & 2**bit) >> bit )
+        self._serial.close()
         return values
     
 
@@ -81,22 +91,26 @@ class ModbusRtuClient():
         response = self._serial.read( 5 + byte_count)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return response
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return None
         if (response[1] != fc.read_holding_registers):
             print("function code doesn't match")
+            self._serial.close()
             return None
         if (response[2] != byte_count):
             print(" Wrong Byte count")
+            self._serial.close()
             return None
         values = []
         data = response[3:-2]
         for register_no in range(len(quantity)):
             value = (data[2*register_no]<<8) + data[2*register_no + 1]
             values.append(value)
-            
+        self._serial.close()
         return values
     
     def read_input_registers(self,start_address,quantity):
@@ -110,22 +124,26 @@ class ModbusRtuClient():
         response = self._serial.read( 5 + byte_count)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return response
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return None
         if (response[1] != fc.read_holding_registers):
             print("function code doesn't match")
+            self._serial.close()
             return None
         if (response[2] != byte_count):
             print(" Wrong Byte count")
+            self._serial.close()
             return None
         values = []
         data = response[3:-2]
         for register_no in range(len(quantity)):
             value = (data[2*register_no]<<8) + data[2*register_no + 1]
             values.append(value)
-            
+        self._serial.close()
         return values
 
     def write_single_coil(self,address,value):
@@ -138,15 +156,19 @@ class ModbusRtuClient():
         response = self._serial.read(8)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return False
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return False
         if (response[1] != fc.write_single_coil):
             print("Invalid function code recieved")
+            self._serial.close()
             return False
         if ((response[2]<<8 + response[3]) != address):
             print("Invalid coil address recieved")
+            self._serial.close()
             return False
         if (value):
             if ( not (response[4] == 0xFF and response[5] == 0x00) ):
@@ -155,6 +177,7 @@ class ModbusRtuClient():
         elif ( not (response[4] == 0x00 and response[5] == 0x00) ):
                 print("Invalid value recieved")
                 return False
+        self._serial.close()
         return True
     
     def write_single_register(self,address,value):
@@ -167,18 +190,23 @@ class ModbusRtuClient():
         response = self._serial.read(8)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return False
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return False
         if (response[1] != fc.write_single_register):
             print("Invalid function code recieved")
+            self._serial.close()
             return False
         if ((response[2]<<8 + response[3]) != address):
             print("Invalid register address recieved")
+            self._serial.close()
             return False
         if ((response[4]<<8 + response[5]) != value):
             print("Invalid value recieved")
+            self._serial.close()
             return False
         return True
     
@@ -192,19 +220,25 @@ class ModbusRtuClient():
         response = self._serial.read(8)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return False
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return False
         if (response[1] != fc.write_multiple_registers):
             print("Invalid function code recieved")
+            self._serial.close()
             return False
         if ((response[2]<<8 + response[3]) != start_address):
             print("Invalid register address recieved")
+            self._serial.close()
             return False
         if ((response[4]<<8 + response[5]) != quantity):
             print("Invalid quantity recieved")
+            self._serial.close()
             return False
+        self._serial.close()
         return True
     
 
@@ -218,19 +252,25 @@ class ModbusRtuClient():
         response = self._serial.read(8)
         if (crc.crc(response[:-2]) != response[-2:]):
             print(" CRC is not zero, discarding packets")
+            self._serial.close()
             return False
         if (response[0] != self._server_address):
             print("Server address doesn't match")
+            self._serial.close()
             return False
         if (response[1] != fc.write_multiple_registers):
             print("Invalid function code recieved")
+            self._serial.close()
             return False
         if ((response[2]<<8 + response[3]) != start_address):
             print("Invalid register address recieved")
+            self._serial.close()
             return False
         if ((response[4]<<8 + response[5]) != quantity):
             print("Invalid quantity recieved")
+            self._serial.close()
             return False
+        self._serial.close()
         return True
 
 
