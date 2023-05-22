@@ -6,7 +6,7 @@ setup(name='modbus-python',
       author='Rahulkannan S',
       author_email='srahulkannan63@gmail.com',
       url='https://github.com/rahulknns/modbus-python.git',
-      install_requires=["serial"],
+      install_requires=["pyserial"],
       packages=['modbus_frames', 'modbus_rtu'],
      )
 
